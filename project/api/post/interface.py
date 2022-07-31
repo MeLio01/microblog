@@ -3,6 +3,8 @@ from typing import Dict, Any
 
 from .model import Post as PostDB
 
+from project.api.user import UserDB
+
 @dataclass
 class Post:
     id: str
@@ -44,3 +46,10 @@ class Post:
         if post_db:
             return cls.instance_creator(post_db)
         return None
+    
+    # @classmethod
+    # def posts_by_user(cls, userinfo: Dict[str, Any]):
+    #     user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
+    #     if user_db:
+    #         return tuple([post.body for post in user_db.posts])
+    #     return None

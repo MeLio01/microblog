@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0f576fe022df
+Revision ID: dfb6a4069c53
 Revises: 
-Create Date: 2022-04-11 21:14:29.213844
+Create Date: 2022-08-01 02:07:04.250420
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0f576fe022df'
+revision = 'dfb6a4069c53'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,6 +33,18 @@ def upgrade():
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
     op.create_index(op.f('ix_user_id'), 'user', ['id'], unique=True)
     op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
+    op.create_table('follow',
+    sa.Column('created_on', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_on', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('active', sa.Boolean(), server_default=sa.text('true'), nullable=False),
+    sa.Column('id', sa.String(length=120), nullable=False),
+    sa.Column('follower_id', sa.String(length=120), nullable=True),
+    sa.Column('followed_id', sa.String(length=120), nullable=True),
+    sa.ForeignKeyConstraint(['followed_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['follower_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_follow_id'), 'follow', ['id'], unique=True)
     op.create_table('post',
     sa.Column('created_on', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_on', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
@@ -54,6 +66,8 @@ def downgrade():
     op.drop_index(op.f('ix_post_timestamp'), table_name='post')
     op.drop_index(op.f('ix_post_id'), table_name='post')
     op.drop_table('post')
+    op.drop_index(op.f('ix_follow_id'), table_name='follow')
+    op.drop_table('follow')
     op.drop_index(op.f('ix_user_username'), table_name='user')
     op.drop_index(op.f('ix_user_id'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')

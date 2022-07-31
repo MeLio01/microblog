@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .model import User as UserDB
 
-from project.api.post import PostDB
 
 @dataclass
 class User:
@@ -15,6 +14,7 @@ class User:
     about_me: str
     last_seen: str
     posts: tuple
+    followed: tuple
 
     @classmethod
     def instance_creator(cls, user_db: UserDB):
@@ -25,7 +25,8 @@ class User:
             password_hash = user_db.password_hash,
             about_me = user_db.about_me,
             last_seen = user_db.last_seen,
-            posts = user_db.posts
+            posts = user_db.posts,
+            followed = user_db.followed
         )
     
     @classmethod
@@ -82,4 +83,11 @@ class User:
         user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
         if user_db:
             return tuple([post.body for post in user_db.posts])
+        return None
+    
+    @classmethod
+    def get_followed(cls, userinfo: Dict[str, Any]):
+        user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
+        if user_db:
+            return tuple([user.followed_id for user in user_db.followed])
         return None
