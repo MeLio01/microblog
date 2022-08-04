@@ -5,12 +5,15 @@ from .model import Post as PostDB
 
 from project.api.user import UserDB
 
+from project.extensions import db
+
 @dataclass
 class Post:
     id: str
     body: str
     timestamp: str
     user_id: str
+    likes: tuple
 
     @classmethod
     def instance_creator(cls, post_db: PostDB):
@@ -18,7 +21,8 @@ class Post:
             id = post_db.id,
             body = post_db.body,
             timestamp = post_db.timestamp,
-            user_id = post_db.user_id
+            user_id = post_db.user_id,
+            likes = post_db.likes
         )
 
     @classmethod
@@ -46,10 +50,19 @@ class Post:
         if post_db:
             return cls.instance_creator(post_db)
         return None
+
+    @classmethod
+    def delete_post(cls, postinfo: Dict[str, Any]):
+        post_db: PostDB = PostDB.get_first({"id": postinfo["id"]})
+        if post_db:
+            db.session.delete(post_db)
+            db.session.commit()
+            return True
+        return False
     
-    # @classmethod
-    # def posts_by_user(cls, userinfo: Dict[str, Any]):
-    #     user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
-    #     if user_db:
-    #         return tuple([post.body for post in user_db.posts])
-    #     return None
+    @classmethod
+    def get_likes(cls, postinfo: Dict[str, Any]):
+        post_db: PostDB = PostDB.get_first({"id": postinfo["id"]})
+        if post_db:
+            return tuple([like.userid for like in post_db.likes])
+        return None

@@ -14,7 +14,9 @@ class User:
     about_me: str
     last_seen: str
     posts: tuple
+    likes: tuple
     followed: tuple
+    followers: tuple
 
     @classmethod
     def instance_creator(cls, user_db: UserDB):
@@ -26,7 +28,9 @@ class User:
             about_me = user_db.about_me,
             last_seen = user_db.last_seen,
             posts = user_db.posts,
-            followed = user_db.followed
+            likes = user_db.likes,
+            followed = user_db.followed,
+            followers = user_db.followers
         )
     
     @classmethod
@@ -79,10 +83,10 @@ class User:
         return None
     
     @classmethod
-    def posts_by_user(cls, userinfo: Dict[str, Any]):
+    def get_posts(cls, userinfo: Dict[str, Any]):
         user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
         if user_db:
-            return tuple([post.body for post in user_db.posts])
+            return tuple([post.id for post in user_db.posts])
         return None
     
     @classmethod
@@ -90,4 +94,18 @@ class User:
         user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
         if user_db:
             return tuple([user.followed_id for user in user_db.followed])
+        return None
+    
+    @classmethod
+    def get_followers(cls, userinfo: Dict[str, Any]):
+        user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
+        if user_db:
+            return tuple([user.follower_id for user in user_db.followers])
+        return None
+    
+    @classmethod
+    def get_likes(cls, userinfo: Dict[str, Any]):
+        user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
+        if user_db:
+            return tuple([like.postid for like in user_db.likes])
         return None

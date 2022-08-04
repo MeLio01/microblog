@@ -30,7 +30,7 @@ class follow:
         )
         follow_db.create()
         if follow_db:
-            follow_user_db = UserDB.get_first({"id": followinfo["followed_id"]})
+            # follow_user_db = UserDB.get_first({"id": followinfo["followed_id"]})
             return cls.instance_creator(follow_db)
         return None
     

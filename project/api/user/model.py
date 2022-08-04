@@ -14,4 +14,6 @@ class User(ResourceMixin, UserMixin, db.Model):
     about_me = db.Column(db.String(200))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow())
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    likes = db.relationship('like', lazy='dynamic')
     followed = db.relationship('follow', foreign_keys='follow.follower_id', backref=db.backref('follower', lazy='joined'), lazy='dynamic')
+    followers = db.relationship('follow', foreign_keys='follow.followed_id', backref=db.backref('followed', lazy='joined'), lazy='dynamic')

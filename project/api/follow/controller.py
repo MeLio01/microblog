@@ -15,10 +15,10 @@ def follow_user():
     if auth != os.environ.get("AUTH_PASSWORD"):
         raise BadRequest("Authorization invalid", 400)
     data = follow_schema.load(request.json)
-    user = follow.follow(data)
-    if user == None:
+    follow_ = follow.follow(data)
+    if follow_ == None:
         raise BadRequest("Credentials invalid", 400)
-    response = follow_out_schema.dump(user)
+    response = follow_out_schema.dump(follow_)
     return response, 200
 
 def unfollow_user():
@@ -26,8 +26,8 @@ def unfollow_user():
     if auth != os.environ.get("AUTH_PASSWORD"):
         raise BadRequest("Authorization invalid", 400)
     data = follow_id_schema.load(request.json)
-    user = follow.unfollow(data)
-    if user == False:
+    unfollow_ = follow.unfollow(data)
+    if unfollow_ == False:
         raise BadRequest("Credentials invalid", 400)
     return jsonify("unfollowed!!"), 200
 
@@ -36,10 +36,10 @@ def get_follow():
     if auth != os.environ.get("AUTH_PASSWORD"):
         raise BadRequest("Authorization invalid", 400)
     data = follow_id_schema.load(request.json)
-    ffollow = follow.get_follow_by_id(data)
-    if follow == None:
+    follow_ = follow.get_follow_by_id(data)
+    if follow_ == None:
         raise BadRequest("Credentials invalid", 400)
-    response = follow_schema.dump(follow)
+    response = follow_schema.dump(follow_)
     return response, 200
 
 follow_blueprint.add_url_rule("/follow", view_func=follow_user, methods=["POST"])
