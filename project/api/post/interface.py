@@ -14,6 +14,7 @@ class Post:
     timestamp: str
     user_id: str
     likes: tuple
+    comments: tuple
 
     @classmethod
     def instance_creator(cls, post_db: PostDB):
@@ -22,7 +23,8 @@ class Post:
             body = post_db.body,
             timestamp = post_db.timestamp,
             user_id = post_db.user_id,
-            likes = post_db.likes
+            likes = post_db.likes,
+            comments = post_db.comments
         )
 
     @classmethod
@@ -65,4 +67,11 @@ class Post:
         post_db: PostDB = PostDB.get_first({"id": postinfo["id"]})
         if post_db:
             return tuple([like.userid for like in post_db.likes])
+        return None
+    
+    @classmethod
+    def get_comments(cls, postinfo: Dict[str, Any]):
+        post_db: PostDB = PostDB.get_first({"id": postinfo["id"]})
+        if post_db:
+            return tuple([comment.id for comment in post_db.comments])
         return None

@@ -17,6 +17,7 @@ class User:
     likes: tuple
     followed: tuple
     followers: tuple
+    comments: tuple
 
     @classmethod
     def instance_creator(cls, user_db: UserDB):
@@ -30,7 +31,8 @@ class User:
             posts = user_db.posts,
             likes = user_db.likes,
             followed = user_db.followed,
-            followers = user_db.followers
+            followers = user_db.followers,
+            comments = user_db.comments
         )
     
     @classmethod
@@ -108,4 +110,11 @@ class User:
         user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
         if user_db:
             return tuple([like.postid for like in user_db.likes])
+        return None
+    
+    @classmethod
+    def get_comments(cls, userinfo: Dict[str, Any]):
+        user_db: UserDB = UserDB.get_first({"id": userinfo["id"]})
+        if user_db:
+            return tuple([comment.id for comment in user_db.comments])
         return None

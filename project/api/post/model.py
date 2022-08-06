@@ -12,3 +12,4 @@ class Post(ResourceMixin, UserMixin, db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     user_id = db.Column(db.String(120), db.ForeignKey("user.id"))
     likes = db.relationship('like', lazy='dynamic')
+    comments = db.relationship('Comment', lazy='dynamic')

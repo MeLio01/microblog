@@ -17,3 +17,4 @@ class User(ResourceMixin, UserMixin, db.Model):
     likes = db.relationship('like', lazy='dynamic')
     followed = db.relationship('follow', foreign_keys='follow.follower_id', backref=db.backref('follower', lazy='joined'), lazy='dynamic')
     followers = db.relationship('follow', foreign_keys='follow.followed_id', backref=db.backref('followed', lazy='joined'), lazy='dynamic')
+    comments = db.relationship('Comment', lazy='dynamic')

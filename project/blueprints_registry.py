@@ -16,3 +16,6 @@ def register_blueprint(app: Flask):
 
 	from project.api.like import like_blueprint
 	app.register_blueprint(like_blueprint, url_prefix="/api")
+
+	from project.api.comment import comment_blueprint
+	app.register_blueprint(comment_blueprint, url_prefix="/api")

@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, jsonify, flash
 
 from .interface import User
-from .service import get_likes_by_user, get_posts_by_user
+from .service import get_likes_by_user, get_posts_by_user, get_comments_by_user
 from .schema import user_profile_schema, user_id_schema, user_out_schema, user_email_schema, user_update_schema
 
 from project.lib.errors import BadRequest
@@ -101,7 +101,15 @@ def likes_by_user():
         raise BadRequest("No posts liked by user", 400)
     return jsonify(posts), 200
 
-
+def comments_by_user():
+    auth = request.headers.get("Authorization")
+    if auth != os.environ.get("AUTH_PASSWORD"):
+        raise BadRequest("Authorization invalid", 400)
+    data = user_id_schema.load(request.json)
+    comments = get_comments_by_user(data)
+    if comments == None:
+        raise BadRequest("No comments by user", 400)
+    return jsonify(comments), 200
 
 
 user_blueprint.add_url_rule("user/register_user", "register_user", register_user, methods=["POST"])
@@ -113,3 +121,4 @@ user_blueprint.add_url_rule("user/posts_by_user", "posts_by_user", posts_by_user
 user_blueprint.add_url_rule("user/followed_by_user", "followed_by_user", followed_by_user, methods=["GET"])
 user_blueprint.add_url_rule("user/followers_by_user", "followers_by_user", followers_by_user, methods=["GET"])
 user_blueprint.add_url_rule("user/likes_by_user", "likes_by_user", likes_by_user, methods=["GET"])
+user_blueprint.add_url_rule("user/comments_by_user", "comments_by_user", comments_by_user, methods=["GET"])
