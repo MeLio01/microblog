@@ -1,0 +1,4 @@
+poetry.lock
+migrations
+/config/app.db
+__pycache__

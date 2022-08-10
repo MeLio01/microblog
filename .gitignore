@@ -1,4 +1,4 @@
-.flaskenv
 poetry.lock
-.env
 __pycache__
+app.db
+migrations
