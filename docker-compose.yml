@@ -1,13 +1,25 @@
 version: '3.7'
 
 services:
-  microblog:
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: microblogdb
+    ports:
+      - "5001:5432"
+    restart: always
+
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: microblog
+    container_name: app
     expose:
       - "5000"
     ports:
       - "5000:5000"
-    command: ["bash", "boot.sh"]
+    # command: ["bash", "start_app.sh"]

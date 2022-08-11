@@ -9,5 +9,5 @@ class DevelopmentConfig(BaseConfig):
 	SECRET_KEY=os.environ.get('SECRET_KEY')
 	if not SECRET_KEY:
 		SECRET_KEY=os.urandom(64)
-	SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'app.db')
-	# SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI') or 'postgresql://postgres:meliodas@localhost:5432/microblogdb'
+	# SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'app.db')
+	SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URI') or 'postgresql://postgres:password@0.0.0.0:5001/microblogdb'
