@@ -5,5 +5,6 @@ WORKDIR /microblog
 COPY . /microblog
 
 RUN pip install poetry
-# RUN poetry install
+RUN /usr/local/bin/python -m pip install --upgrade pip
+RUN poetry install --no-root --no-dev --no-interaction --no-ansi -vvv
 RUN chmod +x start_app.sh
